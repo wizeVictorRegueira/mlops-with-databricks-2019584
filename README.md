@@ -27,6 +27,7 @@ To resolve this issue:
     source venv/bin/activate
 	uv pip install -r pyproject.toml --all-extras
     uv lock
+    uv pip compile --no-annotate pyproject.toml > model_requirements.txt
 
 
 [0]: # (Replace these placeholder URLs with actual course URLs)
