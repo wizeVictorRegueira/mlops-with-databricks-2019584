@@ -25,7 +25,7 @@ spark = DatabricksSession.builder.getOrCreate()
 
 run_id = mlflow.search_runs(
     experiment_names=["/Shared/hotel-cancellations-basic"],
-    filter_string="tags.branch='02_02'",
+    filter_string="tags.branch='02_05'",
 ).run_id[0]
 model = mlflow.sklearn.load_model(f'runs:/{run_id}/lightgbm-pipeline-model')
 
