@@ -1,0 +1,13 @@
+# This is a Databricks asset bundle definition for mlops-with-databricks-2019584.
+# The Databricks extension requires databricks.yml configuration file.
+# See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
+
+bundle:
+  name: mlops-with-databricks-2019584
+
+targets:
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: 

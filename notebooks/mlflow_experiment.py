@@ -3,6 +3,8 @@ import json
 
 import mlflow
 
+mlflow.set_tracking_uri("databricks")
+
 mlflow.set_experiment(experiment_name="/Shared/hotel-cancellations-basic")
 mlflow.set_experiment_tags({"repository_name": "hotel-cancellations"})
 
@@ -18,7 +20,8 @@ with open("mlflow_experiment.json", "w") as json_file:
 # COMMAND ----------
 with mlflow.start_run(
     run_name="demo-run",
-    tags={"git_sha": "51v63531711eaa139"},
+    tags={"git_sha": "51v63531711eaa139",
+          "branch": "02_03"},
     description="demo run",
 ) as run:
     mlflow.log_params({"type": "demo"})
