@@ -18,7 +18,7 @@ dependencies = ["lightgbm>=4.5.0, <5",
 
 [project.optional-dependencies]
 dev = ["databricks-connect>=15.4.1, <16",
-       "databricks-feature-engineering>=0.2.1, <0.3",
-       "databricks-sdk>=0.32.0, < 0.33",
-       "ipykernel=>6.29.5, <7",
+       "databricks-feature-engineering==0.6.0",
+       "databricks-sdk>=0.32.0, <0.33",
+       "ipykernel>=6.29.5, <7",
        "pip>=24.2"]
