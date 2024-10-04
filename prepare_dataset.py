@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 import pandas as pd
 import yaml
@@ -23,6 +23,7 @@ df["reservation_date"] = df["date of reservation"].apply(
 )
 df["arrival_date"] = df["reservation_date"] + pd.to_timedelta(df["lead time"], unit="d")
 df.columns = df.columns.str.replace(" ", "_")
+df.columns = df.columns.str.replace("-", "_")
 df["booking_status"] = df["booking_status"].replace(
     ["Canceled", "Not_Canceled"], [1, 0]
 )
@@ -35,10 +36,21 @@ spark.createDataFrame(extra_set).write.saveAsTable(
     f"{catalog_name}.{schema_name}.extra_set"
 )
 
-spark.createDataFrame(train_set).write.saveAsTable(
-    f"{catalog_name}.{schema_name}.train_set"
-)
 spark.createDataFrame(test_set).write.saveAsTable(
     f"{catalog_name}.{schema_name}.test_set"
 )
 
+spark.createDataFrame(test_set).write.saveAsTable(
+    f"{catalog_name}.{schema_name}.train_set"
+)
+
+spark.sql(f"ALTER TABLE {catalog_name}.{schema_name}.train_set "
+          "SET TBLPROPERTIES (delta.enableChangeDataFeed = true);")
+
+spark.sql(f"ALTER TABLE {catalog_name}.{schema_name}.train_set "
+          "ADD COLUMN update_timestamp_utc TIMESTAMP;")
+
+time_now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+
+spark.sql(f"UPDATE {catalog_name}.{schema_name}.train_set "
+          f"SET update_timestamp_utc = '{time_now}';")
