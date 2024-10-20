@@ -10,4 +10,4 @@ targets:
     mode: development
     default: true
     workspace:
-      host: 
+      host: <YOUR HOST>
