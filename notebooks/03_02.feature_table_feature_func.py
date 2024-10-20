@@ -1,14 +1,13 @@
 # Databricks notebook source
 import yaml
 from databricks import feature_engineering
-from databricks.connect import DatabricksSession
+from pyspark.sql import SparkSession
 from databricks.sdk import WorkspaceClient
-from databricks.connect import DatabricksSession
 
 workspace = WorkspaceClient()
 fe = feature_engineering.FeatureEngineeringClient()
 
-spark = DatabricksSession.builder.getOrCreate()
+spark = SparkSession.builder.getOrCreate()
 
 # COMMAND ----------
 with open("../project_config.yml", "r") as file:
@@ -24,8 +23,8 @@ function_name = f"{catalog_name}.{schema_name}.calculate_lead_time"
 train_set = spark.table(f"{catalog_name}.{schema_name}.train_set")
 test_set = spark.table(f"{catalog_name}.{schema_name}.test_set")
 
-hotel_features_df = train_set[["Booking_ID", "repeated", "P-C", "P-not-C"]]
-train_set = train_set.drop("lead_time", "repeated", "P-C", "P-not-C")
+hotel_features_df = train_set[["Booking_ID", "repeated", "P_C", "P_not_C"]]
+train_set = train_set.drop("lead_time", "repeated", "P_C", "P_not_C")
 
 # COMMAND ----------
 feature_table = fe.create_table(
@@ -38,7 +37,7 @@ feature_table = fe.create_table(
 # COMMAND ----------
 fe.write_table(
     name=feature_table_name,
-    df=test_set[["Booking_ID", "repeated", "P-C", "P-not-C"]],
+    df=test_set[["Booking_ID", "repeated", "P_C", "P_not_C"]],
     mode="merge",
 )
 

@@ -1,7 +1,7 @@
 # Databricks notebook source
 import mlflow
 import yaml
-from databricks.connect import DatabricksSession
+from pyspark.sql import SparkSession
 from lightgbm import LGBMClassifier
 from mlflow.models import infer_signature
 from sklearn.compose import ColumnTransformer
@@ -23,7 +23,7 @@ parameters = config.get("parameters")
 catalog_name = config.get("catalog_name")
 schema_name = config.get("schema_name")
 
-spark = DatabricksSession.builder.getOrCreate()
+spark = SparkSession.builder.getOrCreate()
 
 # COMMAND ----------
 train_set = spark.table(f"{catalog_name}.{schema_name}.train_set")

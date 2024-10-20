@@ -1,4 +1,4 @@
-catalog_name: mlops_test
+catalog_name: mlops_dev
 schema_name: hotel_cancellation
 
 parameters:
@@ -16,8 +16,8 @@ num_features:
   - special_requests
   - lead_time
   - repeated
-  - P-C
-  - P-not-C
+  - P_C
+  - P_not_C
 
 cat_features:
   - type_of_meal

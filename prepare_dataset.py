@@ -2,10 +2,10 @@ from datetime import datetime, timezone
 
 import pandas as pd
 import yaml
-from databricks.connect import DatabricksSession
+from pyspark.sql import SparkSession
 from sklearn.model_selection import train_test_split
 
-spark = DatabricksSession.builder.getOrCreate()
+spark = SparkSession.builder.getOrCreate()
 
 with open("project_config.yml", "r") as file:
     config = yaml.safe_load(file)

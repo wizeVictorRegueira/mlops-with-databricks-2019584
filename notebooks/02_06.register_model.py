@@ -24,9 +24,10 @@ run_id = mlflow.search_runs(
     filter_string="tags.branch='02_04'",
 ).run_id[0]
 
-model_version = mlflow.register_model(model_uri=f'runs:/{run_id}/lightgbm-pipeline-model',
-                     name=model_name,
-                     tags={"git_sha": "51v63531711eaa139"})
+model_version = mlflow.register_model(
+    model_uri=f'runs:/{run_id}/lightgbm-pipeline-model',
+    name=model_name,
+    tags={"git_sha": "51v63531711eaa139"})
 
 # COMMAND ----------
 with open("model_version.json", "w") as json_file:
@@ -34,10 +35,14 @@ with open("model_version.json", "w") as json_file:
 
 # COMMAND ----------
 model_version_alias = "the_best_model"
-client.set_registered_model_alias(model_name, model_version_alias, "1")  
+client.set_registered_model_alias(
+    model_name, model_version_alias, "1")  
  
 model_uri = f"models:/{model_name}@{model_version_alias}"
 model = mlflow.sklearn.load_model(model_uri)
 
 # COMMAND ----------
-client.get_model_version_by_alias(model_name, model_version_alias)
+client.get_model_version_by_alias(
+    model_name, model_version_alias)
+
+# COMMAND ----------

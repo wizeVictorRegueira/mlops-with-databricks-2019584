@@ -3,3 +3,6 @@ uv.lock
 
 .databricks
 .vscode
+.DS_Store
+typings/*
+notebooks/*.json
