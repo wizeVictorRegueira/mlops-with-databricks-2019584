@@ -24,7 +24,6 @@ train_set = spark.table(f"{catalog_name}.{schema_name}.train_set")
 test_set = spark.table(f"{catalog_name}.{schema_name}.test_set")
 
 hotel_features_df = train_set[["Booking_ID", "repeated", "P_C", "P_not_C"]]
-train_set = train_set.drop("lead_time", "repeated", "P_C", "P_not_C")
 
 # COMMAND ----------
 # Option 1: feature engineering client
@@ -39,7 +38,7 @@ spark.sql(f"ALTER TABLE {feature_table_name} SET TBLPROPERTIES (delta.enableChan
 
 fe.write_table(
    name=feature_table_name,
-   df=test_set[["Booking_ID", "repeated", "P-C", "P-not-C"]],
+   df=test_set[["Booking_ID", "repeated", "P_C", "P_not_C"]],
    mode="merge",
 )
 
