@@ -1,7 +1,12 @@
 # Databricks notebook source
 import yaml
 from databricks.sdk import WorkspaceClient
-from databricks.sdk.service.serving import EndpointCoreConfigInput, ServedEntityInput
+from databricks.sdk.service.serving import (
+    EndpointCoreConfigInput,
+    ServedEntityInput,
+    TrafficConfig,
+    Route,
+)
 
 workspace = WorkspaceClient()
 
@@ -13,21 +18,28 @@ schema_name = config.get("schema_name")
 
 # COMMAND ----------
 workspace.serving_endpoints.create(
-    name="vanilla-model-serving",
+    name="hotel-cancellations-model",
     config=EndpointCoreConfigInput(
         served_entities=[
             ServedEntityInput(
-                entity_name=f"{catalog_name}.{schema_name}.hotel_booking_model",
+                entity_name=f"{catalog_name}.{schema_name}.basic_model",
                 scale_to_zero_enabled=True,
                 workload_size="Small",
                 entity_version=1,
             )
-        ]
+        ],
+        # Optional if only 1 entity is served
+        traffic_config=TrafficConfig(
+            routes=[
+                Route(served_model_name="basic_model-1",
+                      traffic_percentage=100)
+            ]
+        ),
     ),
 )
 # COMMAND ----------
 workspace.serving_endpoints.create(
-    name="hotel-feature-serving",
+    name="hotel-cancellations-preds",
     config=EndpointCoreConfigInput(
         served_entities=[
             ServedEntityInput(
@@ -40,7 +52,7 @@ workspace.serving_endpoints.create(
 )
 # COMMAND ----------
 workspace.serving_endpoints.create(
-    name="model-serving-fe",
+    name="hotel-cancellations-model-fe",
     config=EndpointCoreConfigInput(
         served_entities=[
             ServedEntityInput(
