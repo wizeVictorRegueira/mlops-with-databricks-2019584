@@ -21,7 +21,7 @@ mlflow.set_tracking_uri("databricks")
 mlflow.set_registry_uri("databricks-uc")
 
 # COMMAND ----------
-with open("project_config.yml", "r") as file:
+with open("../project_config.yml", "r") as file:
     config = yaml.safe_load(file)
 
 num_features = config.get("num_features")
