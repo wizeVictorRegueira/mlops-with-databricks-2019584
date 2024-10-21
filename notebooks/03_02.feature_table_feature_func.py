@@ -2,6 +2,9 @@
 # MAGIC %pip install lightgbm===4.5.0 scikit-learn==1.5.1 cloudpickle==3.0.0 mlflow==2.16.0 pandas==2.2.2 databricks-feature-engineering==0.6
 
 # COMMAND ----------
+dbutils.library.restartPython() 
+
+# COMMAND ----------
 import yaml
 from databricks import feature_engineering
 from pyspark.sql import SparkSession
