@@ -22,11 +22,16 @@ To resolve this issue:
 
 ## Installing
 1. Clone this repository into your local machine using the terminal (Mac), CMD (Windows), or a GUI tool like SourceTree.
-2. To use these exercise files, set up environment first:
+2. Create a Databricks cluster with runtime 15.4 LTS.
+3. Update databricks.yml file. Make sure databricks.yml contains a valid host.
+4. Install Databricks VS code extension: https://docs.databricks.com/en/dev-tools/vscode-ext/install.html
+5. Configure VS code extension: https://docs.databricks.com/en/dev-tools/vscode-ext/configure.html
+6. If you want to use uv and do not have it, install uv: https://docs.astral.sh/uv/getting-started/installation/
+7. To use these exercise files, set up the environment:
 ```
     uv venv -p 3.11 .venv
     source .venv/bin/activate
-	uv pip install -r pyproject.toml --all-extras
+    uv pip install -r pyproject.toml --all-extras
     uv lock
 ```
 
