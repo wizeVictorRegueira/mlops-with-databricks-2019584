@@ -23,10 +23,12 @@ To resolve this issue:
 ## Installing
 1. Clone this repository into your local machine using the terminal (Mac), CMD (Windows), or a GUI tool like SourceTree.
 2. To use these exercise files, set up environment first:
+```
     uv venv -p 3.11 .venv
     source .venv/bin/activate
 	uv pip install -r pyproject.toml --all-extras
     uv lock
+```
 
 
 [0]: # (Replace these placeholder URLs with actual course URLs)

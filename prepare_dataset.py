@@ -24,9 +24,11 @@ df["reservation_date"] = df["date of reservation"].apply(
 df["arrival_date"] = df["reservation_date"] + pd.to_timedelta(df["lead time"], unit="d")
 df.columns = df.columns.str.replace(" ", "_")
 df.columns = df.columns.str.replace("-", "_")
+
 df["booking_status"] = df["booking_status"].replace(
     ["Canceled", "Not_Canceled"], [1, 0]
 )
+df = df.drop(columns=["date_of_reservation"])
 extra_set = df[df["market_segment_type"] != "Online"]
 df = df[df["market_segment_type"] == "Online"]
 
