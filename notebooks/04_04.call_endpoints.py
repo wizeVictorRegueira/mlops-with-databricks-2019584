@@ -1,54 +1,51 @@
 # Databricks notebook source
 import os
-
 import requests
-
-from databricks.sdk import WorkspaceClient
-from databricks.sdk.service.serving import DataframeSplitInput
-
-workspace = WorkspaceClient()
+import time
 
 # COMMAND ----------
-workspace.serving_endpoints.query(
-    name="hotel-cancellations-preds",
-    dataframe_records=[{"Booking_ID": "INN00002"}],
-)
+
+token = dbutils.notebook.entry_point.getDbutils().notebook().getContext().apiToken().get()
+host = spark.conf.get("spark.databricks.workspaceUrl")
+
 
 # COMMAND ----------
-serving_endpoint = f"https://{os.environ['DATABRICKS_HOST']}/serving-endpoints/hotel-cancellations-preds/invocations"
+
+start_time = time.time()
+serving_endpoint = f"https://{host}/serving-endpoints/hotel-cancellations-preds/invocations"
 response = requests.post(
     f"{serving_endpoint}",
-    headers={"Authorization": f"Bearer {os.environ['DATABRICKS_TOKEN']}"},
-    json={"dataframe_records": [{"Booking_ID": "INN00002"}]},
+    headers={"Authorization": f"Bearer {token}"},
+    json={"dataframe_records": [{"Booking_ID": "INN00005"}]},
 )
+
+end_time = time.time()
+execution_time = end_time - start_time
 
 print("Response status:", response.status_code)
 print("Reponse text:", response.text)
+print("Execution time:", execution_time, "seconds")
 
 # COMMAND ----------
 
-workspace.serving_endpoints.query(
-    name="hotel-cancellations-preds",
-    dataframe_split=DataframeSplitInput(
-        columns=["Booking_ID"],
-        data=[["INN00002"]],
-    ),
-)
-
-# COMMAND ----------
+start_time = time.time()
 response = requests.post(
     f"{serving_endpoint}",
-    headers={"Authorization": f"Bearer {os.environ['DATABRICKS_TOKEN']}"},
-    json={"dataframe_split": [{
+    headers={"Authorization": f"Bearer {token}"},
+    json={"dataframe_split": {
         "columns": ["Booking_ID"],
-        "data": [["INN00002"]]}]},
+        "data": [["INN00005"]]}},
 )
+end_time = time.time()
+execution_time = end_time - start_time
 
 print("Response status:", response.status_code)
 print("Reponse text:", response.text)
+print("Execution time:", execution_time, "seconds")
 
 # COMMAND ----------
 
+start_time = time.time()
 dataframe_records = [
     {
         "number_of_adults": 1,
@@ -66,30 +63,25 @@ dataframe_records = [
         "room_type": "Room_Type 1",
     }
 ]
-
-workspace.serving_endpoints.query(
-    name="hotel-cancellations-model",
-    dataframe_records=dataframe_records,
-)
-
-# COMMAND ----------
-model_serving_endpoint = f"https://{os.environ['DATABRICKS_HOST']}/serving-endpoints/hotel-cancellations-model/invocations"
+model_serving_endpoint = f"https://{host}/serving-endpoints/hotel-cancellations-model/invocations"
 response = requests.post(
     f"{model_serving_endpoint}",
-    headers={"Authorization": f"Bearer {os.environ['DATABRICKS_TOKEN']}"},
+    headers={"Authorization": f"Bearer {token}"},
     json={"dataframe_records": dataframe_records},
 )
 
+end_time = time.time()
+execution_time = end_time - start_time
+
 print("Response status:", response.status_code)
 print("Reponse text:", response.text)
+print("Execution time:", execution_time, "seconds")
 
 # COMMAND ----------
 
-workspace.serving_endpoints.query(
-    name="hotel-cancellations-model-fe",
-    dataframe_records=[
+dataframe_records=[
         {
-            "Booking_ID": "INN00002",
+            "Booking_ID": "INN00005",
             "number_of_adults": 1,
             "number_of_children": 0,
             "number_of_weekend_nights": 1,
@@ -100,9 +92,15 @@ workspace.serving_endpoints.query(
             "arrival_date": "2024-09-18",
             "reservation_date": "2024-09-08",
             "type_of_meal": "Meal Plan 1",
-            "room_type": "Room_Type 1",
+            "room_type": "Room_Type 1"
         }
-    ],
+    ]
+fe_model_serving_endpoint = f"https://{host}/serving-endpoints/hotel-cancellations-model-fe/invocations"
+response = requests.post(
+    f"{fe_model_serving_endpoint}",
+    headers={"Authorization": f"Bearer {token}"},
+    json={"dataframe_records": dataframe_records},
 )
 
-# COMMAND ----------
+print("Response status:", response.status_code)
+print("Reponse text:", response.text)
