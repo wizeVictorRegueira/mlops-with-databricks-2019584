@@ -1,10 +1,11 @@
 # Databricks notebook source
-# MAGIC %pip install lightgbm===4.5.0 scikit-learn==1.5.1 cloudpickle==3.0.0 mlflow==2.16.0 pandas==2.2.2 databricks-feature-engineering==0.6
-
+# MAGIC %pip install -r requirements.in
 # COMMAND ----------
+
 dbutils.library.restartPython() 
 
 # COMMAND ----------
+
 import mlflow
 import yaml
 from databricks import feature_engineering
@@ -27,6 +28,7 @@ mlflow.set_tracking_uri("databricks")
 mlflow.set_registry_uri("databricks-uc")
 
 # COMMAND ----------
+
 with open("../project_config.yml", "r") as file:
     config = yaml.safe_load(file)
 
@@ -38,6 +40,7 @@ catalog_name = config.get("catalog_name")
 schema_name = config.get("schema_name")
 
 # COMMAND ----------
+
 spark = SparkSession.builder.getOrCreate()
 
 train_set = spark.table(
@@ -48,6 +51,7 @@ test_set = spark.table(
     f"{catalog_name}.{schema_name}.test_set").toPandas()
 
 # COMMAND ----------
+
 training_set = fe.create_training_set(
     df=train_set,
     label="booking_status",
@@ -66,8 +70,11 @@ training_set = fe.create_training_set(
             },
         ),
     ],
+    exclude_columns=["update_timestamp_utc", "market_segment_type"]
 )
+
 # COMMAND ----------
+
 training_df = training_set.load_df().toPandas()
 
 X_train = training_df[num_features + cat_features]
@@ -85,7 +92,9 @@ pipeline = Pipeline(
     steps=[("preprocessor", preprocessor), 
            ("classifier", LGBMClassifier(**parameters))]
 )
+
 # COMMAND ----------
+
 mlflow.set_experiment(
     experiment_name="/Shared/hotel-cancellations-fe")
 with mlflow.start_run(
