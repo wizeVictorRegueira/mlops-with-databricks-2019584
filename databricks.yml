@@ -28,8 +28,8 @@ resources:
           new_cluster:
             spark_version: "15.4.x-scala2.12"
             data_security_mode: "SINGLE_USER"
-            node_type_id: "Standard_DS3_v2"
-            driver_node_type_id: "Standard_DS3_v2"
+            node_type_id: "r3.xlarge"
+            driver_node_type_id: "r3.xlarge"
             autoscale:
               min_workers: 1
               max_workers: 1
@@ -64,17 +64,17 @@ resources:
             - pypi: 
                 package: "lightgbm==4.5.0"
             - pypi: 
-                package: "scikit-learn==1.5.1"
+                package: "scikit-learn==1.5.2"
             - pypi: 
-                package: "cloudpickle==3.0.0"
+                package: "cloudpickle==3.1.0"
             - pypi: 
-                package: "mlflow==2.16.0"
+                package: "mlflow==2.17.0"
             - pypi: 
                 package: "numpy==1.26.4"
             - pypi: 
-                package: "pandas==2.2.2"
+                package: "pandas==2.2.3"
             - pypi: 
-                package: "pyarrow==15.0.2"
+                package: "pyarrow==14.0.1"
             - pypi: 
                 package: "cffi==1.17.1"
             - pypi: 
@@ -83,6 +83,8 @@ resources:
                 package: "matplotlib==3.9.2"
             - pypi: 
                 package: "databricks-feature-engineering==0.6"
+            - pypi: 
+                package: "databricks-feature-lookup==1.2.0"
             - pypi: 
                 package: "databricks-sdk==0.32.0"
         - task_key: "deploy_model"
