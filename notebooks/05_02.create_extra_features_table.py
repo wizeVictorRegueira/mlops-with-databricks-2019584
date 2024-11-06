@@ -94,10 +94,7 @@ last_version_train_set.version
 # COMMAND ----------
 spark.sql(
     f"INSERT INTO {catalog_name}.{schema_name}.extra_train_set "
-    f"SELECT *, '{time_now}' as  update_timestamp_utc "
+    f"SELECT *, '{time_now}' as update_timestamp_utc "
     f"FROM {catalog_name}.{schema_name}.extra_set where "
-    "market_segment_type='Offline';"
+    "market_segment_type='Complimentary';"
 )
-# COMMAND ----------
-spark.sql(f"delete from {catalog_name}.{schema_name}.train_set where market_segment_type='Offline'")
-# COMMAND ----------
