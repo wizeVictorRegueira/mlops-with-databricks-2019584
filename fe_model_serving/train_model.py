@@ -74,6 +74,7 @@ training_set = fe.create_training_set(
             },
         ),
     ],
+    exclude_columns=["update_timestamp_utc", "market_segment_type"]
 )
 
 training_df = training_set.load_df().toPandas()
