@@ -30,8 +30,8 @@ spark.sql(f"ALTER TABLE {catalog_name}.{schema_name}.extra_train_set "
 time_now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
 
 spark.sql(
-    f"INSERT INTO {catalog_name}.{schema_name}.train_set "
-    f"SELECT *, '{time_now}' as  update_timestamp_utc "
+    f"INSERT INTO {catalog_name}.{schema_name}.extra_train_set "
+    f"SELECT *, '{time_now}' as update_timestamp_utc "
     f"FROM {catalog_name}.{schema_name}.extra_set where "
     "market_segment_type='Aviation';"
 )
