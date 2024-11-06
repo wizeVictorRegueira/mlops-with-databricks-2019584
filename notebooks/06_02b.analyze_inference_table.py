@@ -44,11 +44,16 @@ response_schema = StructType([
     ]), True)
 ])
 
-inf_table_parsed = inf_table.withColumn("parsed_request", F.from_json(F.col("request"), request_schema))
+inf_table_parsed = inf_table.withColumn("parsed_request", 
+                                        F.from_json(F.col("request"),
+                                                    request_schema))
 
-inf_table_parsed = inf_table_parsed.withColumn("parsed_response", F.from_json(F.col("response"), response_schema))
+inf_table_parsed = inf_table_parsed.withColumn("parsed_response",
+                                               F.from_json(F.col("response"),
+                                                           response_schema))
 
-df_exploded = inf_table_parsed.withColumn("record", F.explode(F.col("parsed_request.dataframe_records")))
+df_exploded = inf_table_parsed.withColumn("record",
+                                          F.explode(F.col("parsed_request.dataframe_records")))
 
 df_final = df_exploded.select(
     F.from_unixtime(F.col("timestamp_ms") / 1000).cast("timestamp").alias("timestamp"),
