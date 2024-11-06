@@ -84,7 +84,9 @@ X_test = test_set[num_features + cat_features]
 y_test = test_set[target]
 
 preprocessor = ColumnTransformer(
-    transformers=[("cat", OneHotEncoder(), cat_features)], 
+    transformers=[("cat",
+                   OneHotEncoder(handle_unknown='ignore'),
+                   cat_features)], 
     remainder="passthrough"
 )
 
