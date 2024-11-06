@@ -36,7 +36,7 @@ spark = SparkSession.builder.getOrCreate()
 workspace = WorkspaceClient()
 
 inf_table = spark.sql(
-    f"SELECT * FROM {catalog_name}.{schema_name}.model_serving_payload "
+    f"SELECT * FROM {catalog_name}.{schema_name}.model_serving_payload_payload"
     f"WHERE timestamp_ms > (SELECT MAX(timestamp_ms) FROM {catalog_name}.{schema_name}.model_monitoring)"
 )
 
