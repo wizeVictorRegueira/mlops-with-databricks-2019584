@@ -42,9 +42,6 @@ workspace = WorkspaceClient()
 fe = feature_engineering.FeatureEngineeringClient()
 mlflow.set_registry_uri("databricks-uc")
 
-with open("project_config.yml", "r") as file:
-    config = yaml.safe_load(file)
-
 num_features = config.get("num_features")
 cat_features = config.get("cat_features")
 target = config.get("target")
@@ -54,10 +51,10 @@ schema_name = config.get("schema_name")
 
 spark = SparkSession.builder.getOrCreate()
 
-train_set = spark.table("mlops_test.hotel_cancellation.train_set").drop(
-    "lead_time", "repeated", "P-C", "P-not-C"
+train_set = spark.table(f"{catalog_name}.{schema_name}.train_set").drop(
+    "lead_time", "repeated", "P_C", "P_not_C"
 )
-test_set = spark.table("mlops_test.hotel_cancellation.test_set").toPandas()
+test_set = spark.table(f"{catalog_name}.{schema_name}.test_set").toPandas()
 
 training_set = fe.create_training_set(
     df=train_set,
@@ -65,7 +62,7 @@ training_set = fe.create_training_set(
     feature_lookups=[
         FeatureLookup(
             table_name=f"{catalog_name}.{schema_name}.hotel_features",
-            feature_names=["repeated", "P-C", "P-not-C"],
+            feature_names=["repeated", "P_C", "P_not_C"],
             lookup_key="Booking_ID",
         ),
         FeatureFunction(
@@ -88,7 +85,9 @@ X_test = test_set[num_features + cat_features]
 y_test = test_set[target]
 
 preprocessor = ColumnTransformer(
-    transformers=[("cat", OneHotEncoder(), cat_features)], remainder="passthrough"
+    transformers=[("cat", 
+                   OneHotEncoder(handle_unknown='ignore'),
+                   cat_features)], remainder="passthrough"
 )
 
 pipeline = Pipeline(

@@ -23,14 +23,11 @@ version = dbutils.jobs.taskValues.get(taskKey="train_model", key="model_version"
 
 workspace = WorkspaceClient()
 
-with open("project_config.yml", "r") as file:
-    config = yaml.safe_load(file)
-
 catalog_name = config.get("catalog_name")
 schema_name = config.get("schema_name")
 
 workspace.serving_endpoints.update_config_and_wait(
-    name="model-serving-fe",
+    name="hotel-cancellations-model-fe",
     served_entities=[
         ServedEntityInput(
             entity_name=f"{catalog_name}.{schema_name}.hotel_booking_model_fe",

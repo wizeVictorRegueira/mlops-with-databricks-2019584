@@ -30,7 +30,7 @@ spark.sql(f"ALTER TABLE {catalog_name}.{schema_name}.extra_train_set "
 time_now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
 
 spark.sql(
-    f"INSERT INTO {catalog_name}.{schema_name}.extra_train_set "
+    f"INSERT INTO {catalog_name}.{schema_name}.train_set "
     f"SELECT *, '{time_now}' as  update_timestamp_utc "
     f"FROM {catalog_name}.{schema_name}.extra_set where "
     "market_segment_type='Aviation';"
@@ -52,12 +52,17 @@ affected_rows = spark.sql(f"""
 # COMMAND ----------
 # write into feature table; update online table
 if affected_rows > 0:
-    spark.sql(
-        f"INSERT INTO {catalog_name}.{schema_name}.hotel_features "
-        f"SELECT Booking_ID, repeated, P_C, P_not_C FROM {catalog_name}.{schema_name}.train_set"
-    )
+    spark.sql(f"""
+        WITH max_timestamp AS (
+            SELECT MAX(update_timestamp_utc) AS max_update_timestamp
+            FROM {catalog_name}.{schema_name}.train_set
+        )
+        INSERT INTO {catalog_name}.{schema_name}.hotel_features
+        SELECT Booking_ID, repeated, P_C, P_not_C 
+        FROM {catalog_name}.{schema_name}.train_set
+        WHERE update_timestamp_utc == (SELECT max_update_timestamp FROM max_timestamp)
+""")
 # COMMAND ----------
-pipeline_id = pipeline_id
 
 update_response = workspace.pipelines.start_update(
     pipeline_id=pipeline_id, full_refresh=False)
@@ -72,6 +77,10 @@ while True:
     elif state in ['FAILED', 'CANCELED']:
         success = 0 
         break
+    elif state == 'WAITING_FOR_RESOURCES':
+        print("Pipeline is waiting for resources.")
+    else:
+        print(f"Pipeline is in {state} state.")
     time.sleep(30)
 
 print(success)
@@ -81,3 +90,14 @@ last_version_train_set = spark.sql(
 ).first()
 
 last_version_train_set.version
+
+# COMMAND ----------
+spark.sql(
+    f"INSERT INTO {catalog_name}.{schema_name}.extra_train_set "
+    f"SELECT *, '{time_now}' as  update_timestamp_utc "
+    f"FROM {catalog_name}.{schema_name}.extra_set where "
+    "market_segment_type='Offline';"
+)
+# COMMAND ----------
+spark.sql(f"delete from {catalog_name}.{schema_name}.train_set where market_segment_type='Offline'")
+# COMMAND ----------
