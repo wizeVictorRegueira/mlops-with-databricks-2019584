@@ -27,14 +27,17 @@ spark = SparkSession.builder.getOrCreate()
 
 catalog_name = config.get("catalog_name")
 schema_name = config.get("schema_name")
+pipeline_id = config.get("pipeline_id")
 
 affected_rows = spark.sql(f"""
+    WITH max_timestamp AS (
+        SELECT MAX(update_timestamp_utc) AS max_update_timestamp
+        FROM {catalog_name}.{schema_name}.train_set
+    )
     INSERT INTO {catalog_name}.{schema_name}.train_set
     SELECT *
     FROM {catalog_name}.{schema_name}.extra_train_set
-    WHERE {catalog_name}.{schema_name}.extra_train_set.update_timestamp_utc > 
-          (SELECT MAX(update_timestamp_utc) 
-          FROM {catalog_name}.{schema_name}.train_set)
+    WHERE update_timestamp_utc > (SELECT max_update_timestamp FROM max_timestamp)
 """).first().num_affected_rows
 
 # write into feature table; update online table
@@ -45,7 +48,7 @@ if affected_rows > 0:
     )
     refreshed = 1
     while True:
-        pipeline_id = '36e67b74-28fe-465a-85e6-80c9a1d20816'
+        pipeline_id = pipeline_id
         update_response = workspace.pipelines.start_update(
             pipeline_id=pipeline_id,
             full_refresh=False)

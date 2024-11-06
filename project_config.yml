@@ -1,5 +1,6 @@
 catalog_name: mlops_dev
 schema_name: hotel_cancellation
+pipeline_id: b4253c5e-dc8f-4935-b6df-07d312a83875
 
 parameters:
   learning_rate: 0.02
