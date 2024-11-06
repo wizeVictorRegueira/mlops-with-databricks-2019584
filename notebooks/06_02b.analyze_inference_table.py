@@ -15,7 +15,7 @@ schema_name = config.get("schema_name")
 
 # COMMAND ----------
 
-inf_table = spark.sql(f"SELECT * FROM {catalog_name}.{schema_name}.model_serving_payload")
+inf_table = spark.sql(f"SELECT * FROM {catalog_name}.{schema_name}.model_serving_payload_payload")
 
 # COMMAND ----------
 
