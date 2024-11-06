@@ -85,7 +85,7 @@ y_test = test_set[target]
 
 preprocessor = ColumnTransformer(
     transformers=[("cat", OneHotEncoder(), cat_features)], 
-    remainder="passthrough", handle_unknown='ignore'
+    remainder="passthrough"
 )
 
 pipeline = Pipeline(
