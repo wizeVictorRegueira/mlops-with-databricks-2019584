@@ -1,4 +1,8 @@
+venv/*
+uv.lock
+
+.databricks
+.vscode
 .DS_Store
-node_modules
-.tmp
-npm-debug.log
+typings/*
+notebooks/*.json
