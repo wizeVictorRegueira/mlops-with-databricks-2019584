@@ -1,8 +1,18 @@
 # MLOps with Databricks
-This is the repository for the LinkedIn Learning course MLOps with Databricks. The full course is available from [LinkedIn Learning][lil-course-url].
+This is the repository for the LinkedIn Learning course `MLOps with Databricks`. The full course is available from [LinkedIn Learning][lil-course-url].
+
+![lil-thumbnail-url]
+
+In this course, MLOps expert Maria Vechtomova introduces the components and principles that you must understand to successfully deploy machine learning models to production on Databricks. Dive into the step-by-step process of using Feature Engineering in Unity Catalog, tracking model experiments in mlflow, registering a model in Unity Catalog, and deploying your model using Databricks model serving. Explore the use cases where Feature Serving can be used and find out how to deploy a Feature Serving endpoint. Plus, learn how to package your code, deploy your project using Databricks Asset Bundles, and monitor your ML application using inference tables and Lakehouse monitoring.
+
+Learning objectives
+* Explain main components and principles required to deploy machine learning models to production on Databricks.
+* Identify how to use experiment tracking system, model registry, feature engineering, model/feature serving, and other features required to deploy ML applications.
+* Articulate how to package your Python code using best practices and deploy your project using Databricks Asset Bundles.
+* Review how to monitor your ML applications.
 
 _See the readme file in the main branch for updated instructions and information._
-## Instructions
+# Instructions
 This repository has branches for each of the videos in the course. You can use the branch pop up menu in github to switch to a specific branch and take a look at the course at that stage, or you can add `/tree/BRANCH_NAME` to the URL to go to the branch you want to access.
 
 ## Branches
@@ -35,9 +45,14 @@ To resolve this issue:
     uv lock
 ```
 
+## Instructor
+
+Maria Vechtomova
+
+MLOps Tech Lead | Databricks MVP | Public Speaker
 
 [0]: # (Replace these placeholder URLs with actual course URLs)
 
-[lil-course-url]: https://www.linkedin.com/learning/
-[lil-thumbnail-url]: http://
+[lil-course-url]: https://www.linkedin.com/learning/mlops-with-databricks
+[lil-thumbnail-url]: https://media.licdn.com/dms/image/v2/D4D0DAQG9Mx2RIXHi3A/learning-public-crop_675_1200/learning-public-crop_675_1200/0/1733879753628?e=2147483647&v=beta&t=WgQPn2ujKbrHAftrG5IDDC0348ZdJmRvCNx8cpK-5ZI
 
